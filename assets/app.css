@@ -1,0 +1,46 @@
+.header {
+    background-color: #051C2C;
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    color: white;
+    padding: 10px;
+}
+
+.header h1{
+    letter-spacing: 1px;
+    margin-left: 17px;
+}
+
+.header div{
+    margin-left: 17px;
+    letter-spacing: 1px;
+    color: lightgrey;
+}
+
+.sub-header {
+    width: 100vw;
+    padding: 10px;
+}
+
+.sub-header h2{
+    margin-left: 17px;
+    letter-spacing: 1px;
+    color:  #051C2C;
+}
+
+.select-option {
+    padding: 10px;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+
+.select-option p {
+    letter-spacing: 1px;
+    font-size: 21px;
+    font-weight: bold;
+}
