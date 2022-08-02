@@ -7,16 +7,6 @@ import pandas as pd
 
 app = Dash(__name__)
 
-# assume you have a "long-form" data frame
-# see https://plotly.com/python/px-arguments/ for more options
-df = pd.DataFrame({
-    "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
-    "Amount": [4, 1, 2, 2, 4, 5],
-    "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
-})
-
-fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
-
 """
     1. Basic setup: We set up the basic application and page view
     At this point we dont apply any styling
@@ -30,19 +20,27 @@ fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
 
 """
     2. Appending Chart: appending a simple chart
+    - assume you have a "long-form" data frame
+    - see https://plotly.com/python/px-arguments/ for more options
 """
 
+# df = pd.DataFrame({
+#     "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
+#     "Amount": [4, 1, 2, 2, 4, 5],
+#     "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
+# })
+#
+# fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
 # app.layout = html.Div(children=[
 #     html.H1(children='Global Fruits Market'),
 #     html.Div(children='''
 #         Comparing fruits production in different markets.
 #     '''),
-#         dcc.Graph(
-#             id='example-graph',
-#             figure=fig
-#         )
+#     dcc.Graph(
+#         id='example-graph',
+#         figure=fig
+#     )
 # ])
-
 
 """
     3. Adding inline styling: see the changes in styling
@@ -50,6 +48,14 @@ fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
     This creates another issue: code gets larger, hence confusing
 """
 
+# df = pd.DataFrame({
+#     "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
+#     "Amount": [4, 1, 2, 2, 4, 5],
+#     "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
+# })
+#
+# fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
+#
 # app.layout = html.Div(children=[
 #     html.H1(
 #         children='Global Fruits Market',
@@ -58,13 +64,13 @@ fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
 #             'color': '#FFFF'
 #         }
 #     ),
-# 
+#
 #     html.Div(children='Comparing fruits production in different markets.', style={
 #         'textAlign': 'center',
 #         'color': '#FFFF',
 #     }),
-# 
-# 
+#
+#
 #     dcc.Graph(
 #         id='example-graph',
 #         figure=fig,
@@ -76,6 +82,14 @@ fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
     4. Moving styling to CSS file: as we want to stick to the clean code,
     moving all inline styling to a separate CSS sheet
 """
+
+# df = pd.DataFrame({
+#     "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
+#     "Amount": [4, 1, 2, 2, 4, 5],
+#     "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
+# })
+#
+# fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
 # app.layout = html.Div(children=[
 #     html.Div(className='header', children=[
 #         html.H1(
@@ -99,7 +113,64 @@ fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
     charts in both vector-quality SVG and high-performance WebGL.
 """
 
-df_scatter = pd.read_csv('https://gist.githubusercontent.com/chriddyp/5d1ea79569ed194d432e56108a04d188/raw/a9f9e8076b837d541398e999dcbac2b2826a81f8/gdp-life-exp-2007.csv')
+# df_scatter = pd.read_csv(
+#     'https://gist.githubusercontent.com/chriddyp/5d1ea79569ed194d432e56108a04d188/raw/a9f9e8076b837d541398e999dcbac2b2826a81f8/gdp-life-exp-2007.csv')
+#
+# fig_scatter = px.scatter(df_scatter, x="gdp per capita", y="life expectancy",
+#                          size="population", color="continent", hover_name="country",
+#                          log_x=True, size_max=60)
+#
+# app.layout = html.Div(children=[
+#     html.Div(className='header', children=[
+#         html.H1(
+#             children='Global Fruits Market',
+#         ),
+#         html.Div(children='Comparing fruits production in different markets'),
+#     ]),
+#     html.Div(className='select-option', children=[
+#         html.P('Select location'),
+#         dcc.RadioItems(id='select_option', options=['New York City', 'Montreal', 'San Francisco'], value='Montreal'),
+#     ], style={'padding': 10, 'flex': 1}),
+#     dcc.Graph(
+#         id='example-graph',
+#     ),
+#     html.Div(className='sub-header', children=[
+#         html.H2(children='GDP per capita')
+#     ]),
+#     dcc.Graph(
+#         id='example-scatter',
+#         figure=fig_scatter,
+#     )
+# ])
+#
+#
+# @app.callback(
+#     Output('example-graph', 'figure'),
+#     Input('select_option', 'value'))
+# def display_figure(selected_city):
+#     data = get_data_sets()
+#     dfc = data[selected_city]
+#     return px.bar(dfc, x="Fruit", y="Amount", color="City", barmode="group")
+
+
+"""
+    6. JavaScript in Dash
+    
+    6.1 Dash uses React under the hood, specifically in the dash-renderer. 
+    The dash-renderer is basically just a React app that renders the layout defined in your
+    Dash app as app.layout. It is also responsible for assigning the callbacks you write in Dash 
+    to the proper components, and keeping everything up-to-date.
+    
+    6.2 You can write some of the client side callback in JavaScript right in the middle of your
+    Dash Python code (see example below). This code will be loaded to browser, thus
+    decreasing burden on dash. 
+    
+    In our example we add a function to change the color 
+    
+"""
+
+df_scatter = pd.read_csv(
+    'https://gist.githubusercontent.com/chriddyp/5d1ea79569ed194d432e56108a04d188/raw/a9f9e8076b837d541398e999dcbac2b2826a81f8/gdp-life-exp-2007.csv')
 
 fig_scatter = px.scatter(df_scatter, x="gdp per capita", y="life expectancy",
                          size="population", color="continent", hover_name="country",
@@ -114,11 +185,10 @@ app.layout = html.Div(children=[
     ]),
     html.Div(className='select-option', children=[
         html.P('Select location'),
-        dcc.RadioItems(id='select_option', options=['New York City', 'Montréal', 'San Francisco'], value='Montréal'),
+        dcc.RadioItems(id='select_option', options=['New York City', 'Montreal', 'San Francisco'], value='Montreal'),
     ], style={'padding': 10, 'flex': 1}),
     dcc.Graph(
         id='example-graph',
-        figure=fig,
     ),
     html.Div(className='sub-header', children=[
         html.H2(children='GDP per capita')
@@ -133,28 +203,36 @@ app.layout = html.Div(children=[
 @app.callback(
     Output('example-graph', 'figure'),
     Input('select_option', 'value'))
-def displayFigure(selected_city):
+def display_figure(selected_city):
+    data = get_data_sets()
+    dfc = data[selected_city]
+    return px.bar(dfc, x="Fruit", y="Amount", color="City", barmode="group")
+
+
+# Helper functions
+def get_data_sets():
     ny = 'New York City'
     sn = 'San Francisco'
-    dfc = pd.DataFrame({
+    mn = "Montreal"
+
+    df1 = pd.DataFrame({
         "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
         "Amount": [4, 1, 2, 2, 4, 5],
-        "City": ["Average", "Average", "Average", "Montreal", "Montreal", "Montreal"]
+        "City": ["SF", "SF", "SF", mn, mn, mn]
     })
-    if selected_city == ny:
-        dfc = pd.DataFrame({
-            "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
-            "Amount": [4, 1, 2, 6, 2, 4],
-            "City": ["Average", "Average", "Average", ny, ny, ny]
-        })
-    elif selected_city == sn:
-        dfc = pd.DataFrame({
-            "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
-            "Amount": [4, 1, 2, 1, 5, 3],
-            "City": ["Average", "Average", "Average", ny, ny, ny]
-        })
 
-    return px.bar(dfc, x="Fruit", y="Amount", color="City", barmode="group")
+    df2 = pd.DataFrame({
+        "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
+        "Amount": [4, 1, 2, 6, 2, 4],
+        "City": ["Average", "Average", "Average", ny, ny, ny]})
+
+    df3 = pd.DataFrame({
+        "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
+        "Amount": [4, 1, 2, 1, 5, 3],
+        "City": ["Average", "Average", "Average", sn, sn, sn]})
+
+    return {ny: df1, sn: df2, mn: df3}
+
 
 
 if __name__ == '__main__':
