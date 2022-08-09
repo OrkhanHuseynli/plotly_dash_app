@@ -1,7 +1,7 @@
 # Run this app with `python app.py` and
 # visit http://127.0.0.1:8050/ in your web browser.
 
-from dash import Dash, html, dcc, Output, Input
+from dash import Dash, html, dcc, Output, Input, ClientsideFunction
 import plotly.express as px
 import pandas as pd
 
@@ -165,8 +165,10 @@ app = Dash(__name__)
     Dash Python code (see example below). This code will be loaded to browser, thus
     decreasing burden on dash. 
     
-    In our example we add a function to change the color 
-    
+    Example
+    In our example we add a function to redlect the inpout in the text field. 
+    we could do it via callbacks, but lets reduce the load on our Dash Engine
+    and put this logic into our browser instead
 """
 
 df_scatter = pd.read_csv(
@@ -196,9 +198,57 @@ app.layout = html.Div(children=[
     dcc.Graph(
         id='example-scatter',
         figure=fig_scatter,
-    )
+    ),
+    html.Br(),
+    html.Div(className='sub-header', children=[
+        html.H2(children='Insert your values here')
+    ]),
+    html.Div(id='input_wrapper', className='input-wrapper',
+             children=[
+                 dcc.Input(
+                     id="input_example",
+                     type='text',
+                     placeholder="Put some text here",
+                 ),
+                 html.Div(id="output_for_input")
+             ]),
 ])
+""" 
+#example for input field with normal callback
 
+@app.callback(
+    Output("output_for_input", "children"),
+    [Input("input_example", "value")],
+)
+def normal_callback(val):
+    return val
+"""
+
+
+#example for input field with client side call ( a call from browser)
+# you can put this code to js file
+# under /assets/*.js. But the must be additional configuration (see example below)
+# app.clientside_callback(
+#     """
+#     function(val) {
+#         return val;
+#     }
+#     """,
+#     Output("output_for_input", "children"),
+#     Input("input_example", "value"),
+# )
+
+
+# For this specific example, the code is located at app.js
+# The code below ties up the dash to the code definition in js file
+app.clientside_callback(
+    ClientsideFunction(
+        namespace='clientside',
+        function_name='input_change_function'
+    ),
+    Output('output_for_input', 'children'),
+    Input('input_example', 'value'),
+)
 
 @app.callback(
     Output('example-graph', 'figure'),
