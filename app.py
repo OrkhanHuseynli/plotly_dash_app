@@ -23,7 +23,7 @@ app = Dash(__name__)
     - assume you have a "long-form" data frame
     - see https://plotly.com/python/px-arguments/ for more options
 """
-
+#
 # df = pd.DataFrame({
 #     "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
 #     "Amount": [4, 1, 2, 2, 4, 5],
@@ -113,64 +113,6 @@ app = Dash(__name__)
     charts in both vector-quality SVG and high-performance WebGL.
 """
 
-# df_scatter = pd.read_csv(
-#     'https://gist.githubusercontent.com/chriddyp/5d1ea79569ed194d432e56108a04d188/raw/a9f9e8076b837d541398e999dcbac2b2826a81f8/gdp-life-exp-2007.csv')
-#
-# fig_scatter = px.scatter(df_scatter, x="gdp per capita", y="life expectancy",
-#                          size="population", color="continent", hover_name="country",
-#                          log_x=True, size_max=60)
-#
-# app.layout = html.Div(children=[
-#     html.Div(className='header', children=[
-#         html.H1(
-#             children='Global Fruits Market',
-#         ),
-#         html.Div(children='Comparing fruits production in different markets'),
-#     ]),
-#     html.Div(className='select-option', children=[
-#         html.P('Select location'),
-#         dcc.RadioItems(id='select_option', options=['New York City', 'Montreal', 'San Francisco'], value='Montreal'),
-#     ], style={'padding': 10, 'flex': 1}),
-#     dcc.Graph(
-#         id='example-graph',
-#     ),
-#     html.Div(className='sub-header', children=[
-#         html.H2(children='GDP per capita')
-#     ]),
-#     dcc.Graph(
-#         id='example-scatter',
-#         figure=fig_scatter,
-#     )
-# ])
-#
-#
-# @app.callback(
-#     Output('example-graph', 'figure'),
-#     Input('select_option', 'value'))
-# def display_figure(selected_city):
-#     data = get_data_sets()
-#     dfc = data[selected_city]
-#     return px.bar(dfc, x="Fruit", y="Amount", color="City", barmode="group")
-
-
-"""
-    6. JavaScript in Dash
-    
-    6.1 Dash uses React under the hood, specifically in the dash-renderer. 
-    The dash-renderer is basically just a React app that renders the layout defined in your
-    Dash app as app.layout. It is also responsible for assigning the callbacks you write in Dash 
-    to the proper components, and keeping everything up-to-date.
-    
-    6.2 You can write some of the client side callback in JavaScript right in the middle of your
-    Dash Python code (see example below). This code will be loaded to browser, thus
-    decreasing burden on dash. 
-    
-    Example
-    In our example we add a function to redlect the inpout in the text field. 
-    we could do it via callbacks, but lets reduce the load on our Dash Engine
-    and put this logic into our browser instead
-"""
-
 df_scatter = pd.read_csv(
     'https://gist.githubusercontent.com/chriddyp/5d1ea79569ed194d432e56108a04d188/raw/a9f9e8076b837d541398e999dcbac2b2826a81f8/gdp-life-exp-2007.csv')
 
@@ -198,31 +140,99 @@ app.layout = html.Div(children=[
     dcc.Graph(
         id='example-scatter',
         figure=fig_scatter,
-    ),
-    html.Br(),
-    html.Div(className='sub-header', children=[
-        html.H2(children='Insert your values here')
-    ]),
-    html.Div(id='input_wrapper', className='input-wrapper',
-             children=[
-                 dcc.Input(
-                     id="input_example",
-                     type='text',
-                     placeholder="Put some text here",
-                 ),
-                 html.Div(id="output_for_input")
-             ]),
+    )
 ])
-""" 
-#example for input field with normal callback
+
 
 @app.callback(
-    Output("output_for_input", "children"),
-    [Input("input_example", "value")],
-)
-def normal_callback(val):
-    return val
+    Output('example-graph', 'figure'),
+    Input('select_option', 'value'))
+def display_figure(selected_city):
+    data = get_data_sets()
+    dfc = data[selected_city]
+    return px.bar(dfc, x="Fruit", y="Amount", color="City", barmode="group")
+
+
 """
+    6. JavaScript in Dash
+    
+    6.1 Dash uses React under the hood, specifically in the dash-renderer. 
+    The dash-renderer is basically just a React app that renders the layout defined in your
+    Dash app as app.layout. It is also responsible for assigning the callbacks you write in Dash 
+    to the proper components, and keeping everything up-to-date.
+    
+    6.2 You can write some of the client side callback in JavaScript right in the middle of your
+    Dash Python code (see example below). This code will be loaded to browser, thus
+    decreasing burden on dash. 
+    
+    Example
+    In our example we add a function to redlect the inpout in the text field. 
+    we could do it via callbacks, but lets reduce the load on our Dash Engine
+    and put this logic into our browser instead
+"""
+
+# df_scatter = pd.read_csv(
+#     'https://gist.githubusercontent.com/chriddyp/5d1ea79569ed194d432e56108a04d188/raw/a9f9e8076b837d541398e999dcbac2b2826a81f8/gdp-life-exp-2007.csv')
+#
+# fig_scatter = px.scatter(df_scatter, x="gdp per capita", y="life expectancy",
+#                          size="population", color="continent", hover_name="country",
+#                          log_x=True, size_max=60)
+#
+# app.layout = html.Div(children=[
+#     html.Div(className='header', children=[
+#         html.H1(
+#             children='Global Fruits Market',
+#         ),
+#         html.Div(children='Comparing fruits production in different markets'),
+#     ]),
+#     html.Div(className='select-option', children=[
+#         html.P('Select location'),
+#         dcc.RadioItems(id='select_option', options=['New York City', 'Montreal', 'San Francisco'], value='Montreal'),
+#     ], style={'padding': 10, 'flex': 1}),
+#     dcc.Graph(
+#         id='example-graph',
+#     ),
+#     html.Div(className='sub-header', children=[
+#         html.H2(children='GDP per capita')
+#     ]),
+#     dcc.Graph(
+#         id='example-scatter',
+#         figure=fig_scatter,
+#     ),
+#     html.Br(),
+#     html.Div(className='sub-header', children=[
+#         html.H2(children='Insert your values here')
+#     ]),
+#     html.Div(id='input_wrapper', className='input-wrapper',
+#              children=[
+#                  dcc.Input(
+#                      id="input_example",
+#                      type='text',
+#                      placeholder="Put some text here",
+#                  ),
+#                  html.Div(id="output_for_input")
+#              ]),
+# ])
+#
+# @app.callback(
+#     Output('example-graph', 'figure'),
+#     Input('select_option', 'value'))
+# def display_figure(selected_city):
+#     data = get_data_sets()
+#     dfc = data[selected_city]
+#     return px.bar(dfc, x="Fruit", y="Amount", color="City", barmode="group")
+
+
+# """
+# #example for input field with normal callback
+#
+# @app.callback(
+#     Output("output_for_input", "children"),
+#     [Input("input_example", "value")],
+# )
+# def normal_callback(val):
+#     return val
+# """
 
 
 #example for input field with client side call ( a call from browser)
@@ -241,25 +251,18 @@ def normal_callback(val):
 
 # For this specific example, the code is located at app.js
 # The code below ties up the dash to the code definition in js file
-app.clientside_callback(
-    ClientsideFunction(
-        namespace='clientside',
-        function_name='input_change_function'
-    ),
-    Output('output_for_input', 'children'),
-    Input('input_example', 'value'),
-)
-
-@app.callback(
-    Output('example-graph', 'figure'),
-    Input('select_option', 'value'))
-def display_figure(selected_city):
-    data = get_data_sets()
-    dfc = data[selected_city]
-    return px.bar(dfc, x="Fruit", y="Amount", color="City", barmode="group")
+# app.clientside_callback(
+#     ClientsideFunction(
+#         namespace='clientside',
+#         function_name='input_change_function'
+#     ),
+#     Output('output_for_input', 'children'),
+#     Input('input_example', 'value'),
+# )
 
 
-# Helper functions
+
+# # Helper functions
 def get_data_sets():
     ny = 'New York City'
     sn = 'San Francisco'
@@ -268,18 +271,18 @@ def get_data_sets():
     df1 = pd.DataFrame({
         "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
         "Amount": [4, 1, 2, 2, 4, 5],
-        "City": ["SF", "SF", "SF", mn, mn, mn]
+        "City": ["SF", "SF", "SF", ny, ny, ny]
     })
 
     df2 = pd.DataFrame({
         "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
         "Amount": [4, 1, 2, 6, 2, 4],
-        "City": ["Average", "Average", "Average", ny, ny, ny]})
+        "City": ["Average", "Average", "Average", sn, sn, sn]})
 
     df3 = pd.DataFrame({
         "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
         "Amount": [4, 1, 2, 1, 5, 3],
-        "City": ["Average", "Average", "Average", sn, sn, sn]})
+        "City": ["Average", "Average", "Average", mn, mn, mn]})
 
     return {ny: df1, sn: df2, mn: df3}
 
